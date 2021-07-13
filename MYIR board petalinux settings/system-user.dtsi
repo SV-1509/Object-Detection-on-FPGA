@@ -1,0 +1,348 @@
+/include/ "system-conf.dtsi"
+/ {
+	chosen {
+		bootargs = "console=ttyPS0,115200 earlyprintk root=/dev/mmcblk1p2 rw rootwait clk_ignore_unused";
+		stdout-path = "serial0:115200n8";
+	};
+
+	gpio-keys {
+                compatible = "gpio-keys";
+                autorepeat;
+                sw19 {
+                        label = "s1";
+                        gpios = <&gpio 82 1>;
+                        linux,code = <108>;
+                        gpio-key,wakeup;
+                        autorepeat;
+                };
+        };
+
+        leds {
+                compatible = "gpio-leds";
+                led0 {
+                        label = "led_yellow0";
+                        gpios = <&gpio 80 0>;
+                        linux,default-trigger = "gpio";
+                };
+                led1 {
+                        label = "led_yellow1";
+                        gpios = <&gpio 81 0>;
+                        linux,default-trigger = "gpio";
+                };
+        };
+
+        watchdog {
+                compatible = "gpio-watchdog";
+        };
+};
+
+&gem0 {
+	status = "disable";
+};
+
+&gem1 {
+	status = "disable";
+};
+
+&gem2 {
+	status = "disable";
+};
+
+&gem3 {
+        phy-handle = <&phy0>;
+	phy0: phy@21 {
+                reg = <5>;
+                ti,rx-internal-delay = <0x8>;
+                ti,tx-internal-delay = <0xa>;
+                ti,fifo-depth = <0x1>;
+                ti,dp83867-rxctrl-strap-quirk;
+        };
+
+};
+
+&sdhci0 {
+        no-1-8-v;
+};
+
+&sdhci1 {
+        no-1-8-v;
+};
+
+&qspi {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        flash0: flash@0 {
+		compatible = "m25p80";
+		reg = <0x0>;
+		#address-cells = <1>;
+                #size-cells = <1>;
+                spi-tx-bus-width=<1>;
+                spi-rx-bus-width=<4>;
+                spi-max-frequency = <54000000>;
+                partition@0 {
+                        label = "boot";
+                        reg = <0x00000000 0x00a00000>;
+                };
+                partition@1 {
+                        label = "kernel";
+                        reg = <0x00a00000 0x01400000>;
+                };
+                partition@2 {
+                        label = "data";
+                        reg = <0x01e00000 0x00160000>;
+                };
+		partition@3 {
+			label = "bootenv";
+			reg = <0x01f60000 0x00040000>;
+		};
+        };
+};
+
+&sata {
+        phy-names = "sata-phy";
+        phys = <&lane1 1 1 1 125000000>;
+};
+
+&i2c0 {
+        i2c-mux@70 {
+                compatible = "nxp,pca9548";
+                #address-cells = <1>;
+                #size-cells = <0>;
+                reg = <0x70>;
+                i2c@0 {
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        reg = <0>;
+                };
+                i2c@1 {
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        reg = <1>;
+
+                        sii902x@3b {
+                                compatible = "sii902x";
+                                reg = <0x3b>;
+                                interrupt-parent = <&gic>;
+                                interrupts = <0x0 89 0x4>;
+                                mode_str = "1920x1080";
+                                bits-per-pixel = <0x10>;
+                        };
+                };
+                i2c@2 {
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        reg = <2>;
+
+                        /*
+                        ft0x5x_ts@38 {
+                                compatible = "ft5x06_ts";
+                                reg = <0x38>;
+                                tp_int = <&gpio 78 1>;
+                                polling_mode = <0x0 0x0>;
+                                multi_touch = <0x0 0x0>;
+                        };
+                        */
+
+                        tsc2007@49 {
+                                compatible = "ti,tsc2007";
+                                reg = <0x49>;
+                                //interrupt-parent = <&gic>;
+                                //interrupts = <0x0 89 0x4>;
+                                ti,x-plate-ohms = <0x28f>;
+                                ti,poll-period = <0x0 0x1e>;
+                                gpios = <&gpio 78 1>;
+                        };
+                };
+        };
+};
+
+&amba_pl {
+	axi_vdma_vga: axi_vdma_vga@a0010000 {
+		compatible = "myir,vdma-fb";
+		dmas = <&axi_vdma_0 0>;
+		dma-names = "axivdma";
+		// reg = <0xa0010000 0x10000>;
+		reg = <0x0 0xa0001000 0x0 0x1000>;
+		fmr,clk-baseaddr = <0xa0010000>;
+		fmr,clk-size = <0x1000>;
+		fmr,vtc-baseaddr = <0xa0020000>; 
+		fmr,vtc-size = <0x10000>; 
+		fmr,display-color-space = <0x0>; 	//RGB
+		fmr,display-interface = <0x0>;
+		active-layer = <0>;
+		//videomode = "1920x1080";
+		videomode = "800x480_LCDV2";
+
+		fmr-video-params {
+			640x480_LCD1{
+				name = "640x480_LCD1";
+				refresh = <60>;
+				xres = <640>;
+				yres = <480>;
+				pixclock-khz = <25000>;
+				left-margin = <16>;
+				right-margin = <48>;
+				upper-margin = <10>;
+				lower-margin = <33>;
+				hsync-len = <96>;
+				vsync-len = <2>;
+				sync = <0>;
+				vmode = <0>;
+
+				dynclk-clk0L = <0x0104>;
+				dynclk-clkFBL = <0x0145>;
+				dynclk-clkFBH_clk0H = <0>;
+				dynclk-divclk = <0x1041>;
+				dynclk-lockL = <0x3E8FA401>;
+				dynclk-fltr_lockH = <0x4B00E7>;
+			};
+			480x272_LCDV1{
+				name = "480x272_LCDV1";
+				refresh = <60>;
+				xres = <480>;
+				yres = <272>;
+				pixclock-khz = <10000>;
+				left-margin = <40>;
+				right-margin = <40>;
+				upper-margin = <29>;
+				lower-margin = <13>;
+				hsync-len = <48>;
+				vsync-len = <3>;
+				sync = <0>;
+				vmode = <0>;
+
+				dynclk-clk0L = <0x0186>;
+				dynclk-clkFBL = <0x00C3>;
+				dynclk-clkFBH_clk0H = <0>;
+				dynclk-divclk = <0x1041>;
+				dynclk-lockL = <0x7E8FA401>;
+				dynclk-fltr_lockH = <0x73008C>;
+			};
+			800x480_LCDV2 {
+				name = "800x480_LCDV2";
+				refresh = <60>;
+				xres = <800>;
+				yres = <480>;
+				pixclock-khz = <33330>;
+				left-margin = <210>;
+				right-margin = <44>;
+				upper-margin = <22>;
+				lower-margin = <21>;
+				hsync-len = <2>;
+				vsync-len = <2>;
+				sync = <0>;
+				vmode = <0>;
+
+				dynclk-clk0L = <0x8000C4>;
+				dynclk-clkFBL = <0x800452>;
+				dynclk-clkFBH_clk0H = <0>;
+				dynclk-divclk = <0x2042>;
+				dynclk-lockL = <0xD13FA401>;
+				dynclk-fltr_lockH = <0x6300FF>;
+			};
+			1024x600 {
+				name = "1024x600";
+				refresh = <60>;
+				xres = <1024>;
+				yres = <600>;
+				pixclock-khz = <51200>;
+				left-margin = <160>;//H Front Porch
+				right-margin = <140>;//H Back Porch
+				upper-margin = <12>;//V Back Porch
+				lower-margin = <20>;//V Front Porch
+				hsync-len = <20>;//H Sync Time
+				vsync-len = <3>;//V Sync Time
+				sync = <0>;
+				vmode = <0>;
+			};	
+			1024x768 {
+				name = "1024x768";
+				refresh = <60>;
+				xres = <1024>;
+				yres = <768>;
+				pixclock-khz = <65000>;
+				left-margin = <24>;//H Front Porch
+				right-margin = <160>;//H Back Porch
+				upper-margin = <29>;//V Back Porch
+				lower-margin = <3>;//V Front Porch
+				hsync-len = <136>;//H Sync Time
+				vsync-len = <6>;//V Sync Time
+				sync = <0>;
+				vmode = <0>;
+
+				dynclk-clk0L = <0x0041>;
+				dynclk-clkFBL = <0x800187>;
+				dynclk-clkFBH_clk0H = <0>;
+				dynclk-divclk = <0x0041>;
+				dynclk-lockL = <0xEEEFA401>;
+				dynclk-fltr_lockH = <0xB300FF>;
+			};
+			1280x720 {
+				name = "1280x720";
+				refresh = <60>;
+				xres = <1280>;
+				yres = <720>;
+				pixclock-khz = <74250>;
+				left-margin = <220>;
+				right-margin = <110>;
+				upper-margin = <20>;
+				lower-margin = <5>;
+				hsync-len = <40>;
+				vsync-len = <5>;
+				sync = <1>;
+				vmode = <0>;
+
+				dynclk-clk0L = <0x0041>;
+				dynclk-clkFBL = <0x069A>;
+				dynclk-clkFBH_clk0H = <0>;
+				dynclk-divclk = <0x20C4>;
+				dynclk-lockL = <0xCFAFA401>;
+				dynclk-fltr_lockH = <0xA300FF>;
+			};
+			1680x1050 {
+				name = "1680x1050";
+				refresh = <60>;
+				xres = <1680>;
+				yres = <1050>;
+				pixclock-khz = <119000>;
+				left-margin = <80>;
+				right-margin = <48>;
+				upper-margin = <21>;
+				lower-margin = <3>;
+				hsync-len = <32>;
+				vsync-len = <6>;
+				sync = <0>;
+				vmode = <0>;
+
+				dynclk-clk0L = <0x400041>;
+				dynclk-clkFBL = <0x00C3>;
+				dynclk-clkFBH_clk0H = <0>;
+				dynclk-divclk = <0x1041>;
+				dynclk-lockL = <0x7E8FA401>;
+				dynclk-fltr_lockH = <0x73008C>;
+			};
+			1920x1080 {
+				name = "1920x1080";
+				refresh = <60>;
+				xres = <1920>;
+				yres = <1080>;
+				pixclock-khz = <148500>;
+				left-margin = <88>;	//H Front Porch
+				right-margin = <148>;	//H Back Porch
+				upper-margin = <36>;	//V Back Porch
+				lower-margin = <4>;	//V Front Porch
+				hsync-len = <44>;	//H Sync Time
+				vsync-len = <5>;	//V Sync Time
+				sync = <0>;
+				vmode = <0>;
+
+				dynclk-clk0L = <0x400041>;
+				dynclk-clkFBL = <0x069A>;
+				dynclk-clkFBH_clk0H = <0>;
+				dynclk-divclk = <0x20C4>;
+				dynclk-lockL = <0xCFAFA401>;
+				dynclk-fltr_lockH = <0xA300FF>;
+			};
+		};
+	};
+};
