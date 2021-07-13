@@ -86,5 +86,5 @@ Run the scripts to benchmark the model or to run the model on realtime.
 
 ## Results
 
-![a](a.JPG) ![a_resullt](a_result.JPG)
+![a](a.jpg) ![a_resullt](a_result.jpg)
 
