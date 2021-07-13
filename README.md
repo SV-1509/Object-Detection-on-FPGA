@@ -54,11 +54,11 @@ Make use of [vai_q_tensorflow](https://www.xilinx.com/html_docs/vitis_ai/1_3/ten
 Results for accuracy of 32 bit and quantized 8 bit are as follows:
 
 ### 32 bit
-![32](32bit.jpg)
+![32](32bit.JPG)
 
 
 ### Quantized 8 bit
-![8](8bit.jpg)
+![8](8bit.JPG)
 
 A decrease in accuracy occurs but this is expected.
 
