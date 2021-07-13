@@ -33,7 +33,7 @@ Once the software component is also ready we can obtain the architecture file(in
 For the last 2 steps detailed tutorial could be found [here](https://github.com/Xilinx/Vitis-Tutorials/blob/master/Vitis_Platform_Creation/Introduction/02-Edge-AI-ZCU104/step3.md)
 
 Note : This .json and boot files are readily available for ZCU 102 and ZCU 104, provided by xilinx. 
-       They could be downloded from [ZCU 102](https://www.xilinx.com/bin/public/openDownload?filename=xilinx-zcu102-dpu-v2020.2-v1.3.1.img.gz) [ZCU 104](https://www.xilinx.com/bin/public/openDownload?filename=xilinx-zcu104-dpu-v2020.2-v1.3.1.img.gz)
+       They could be downloded from [ZCU 102](https://www.xilinx.com/bin/public/openDownload?filename=xilinx-zcu102-dpu-v2020.2-v1.3.1.img.gz) , [ZCU 104](https://www.xilinx.com/bin/public/openDownload?filename=xilinx-zcu104-dpu-v2020.2-v1.3.1.img.gz)
 
 ## Step 3 
 
@@ -54,8 +54,11 @@ Make use of [vai_q_tensorflow](https://www.xilinx.com/html_docs/vitis_ai/1_3/ten
 Results for accuracy of 32 bit and quantized 8 bit are as follows:
 
 ### 32 bit
+![32](32bit.jpg)
+
 
 ### Quantized 8 bit
+![8](8bit.jpg)
 
 A decrease in accuracy occurs but this is expected.
 
