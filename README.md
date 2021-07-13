@@ -74,3 +74,13 @@ The xmodel file ceated in this step contains the instruction set for our DPU ip.
 
 ## Step 5
 
+Flash the boot files we created earlier to an SD card
+
+Boot the board using this SD card.
+
+Copy the compiled output files and other necessary libraries(VART), scripts for testing , and data to work on to the board via SSH.
+
+Detailed explanation of this can be found [here](https://github.com/Xilinx/Vitis-AI/blob/master/tools/Vitis-AI-Library/README.md#quick-start-for-edge)
+
+Run the scripts to benchmark the model or to run the model on realtime.
+
