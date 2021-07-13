@@ -24,4 +24,4 @@ Here the device tree is defined and necessary drivers are defined.
 
 For ZCU102 & ZCU104 evaluation kits these parameters are given in their [Github repo](https://github.com/Xilinx/Vitis-Tutorials/blob/master/Vitis_Platform_Creation/Introduction/02-Edge-AI-ZCU104/step2.md)
 
-For MYIR board these parameters are added with this repo
+For MYIR board these parameters are added with this [repo](https://github.com/SV-1509/Object-Detection-on-FPGA/tree/main/MYIR%20board%20petalinux%20settings)
