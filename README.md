@@ -1,3 +1,6 @@
 # Object-Detection-on-FPGA
-Tutorial on how to run object detection on fpga
+
+
+
+##Step 1
 ![Hardware](hardware.png)
