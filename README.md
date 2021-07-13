@@ -2,5 +2,5 @@
 
 
 
-#Step 1
+## Step 1
 ![Hardware](hardware.png)
