@@ -84,3 +84,7 @@ Detailed explanation of this can be found [here](https://github.com/Xilinx/Vitis
 
 Run the scripts to benchmark the model or to run the model on realtime.
 
+## Results
+
+![a](a.JPG) ![a_resullt](a_result.JPG)
+
