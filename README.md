@@ -47,7 +47,7 @@ Since training a model from scratch would take a lot of time and power we can do
 
 Install [docker](https://docs.docker.com/engine/install/)
 
-Download and nstall the [vitis ai docker image](https://www.xilinx.com/html_docs/vitis_ai/1_3/installation.html)
+Download and install the [vitis ai docker image](https://www.xilinx.com/html_docs/vitis_ai/1_3/installation.html)
 
 Make use of [vai_q_tensorflow](https://www.xilinx.com/html_docs/vitis_ai/1_3/tensorflow_1x.html#zuc1592307653938) function provided by xilinx to quantize the 32 bit model we have to an 8bit model.
 
